@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -116,7 +118,18 @@ func max(a, b float64) float64 {
 }
 
 func printStats(stats map[string]Stats) {
-	for station, stat := range stats {
-		println(station, stat.Min, stat.Max, stat.Mean)
+	var stations []string
+	for station := range stats {
+		stations = append(stations, station)
 	}
+	sort.Strings(stations)
+	fmt.Print("{")
+	for i, station := range stations {
+		stationStats := stats[station]
+		fmt.Printf("%s=%.1f/%.1f/%.1f", station, stationStats.Min, stationStats.Mean, stationStats.Max)
+		if i < len(stations)-1 {
+			fmt.Print(", ")
+		}
+	}
+	fmt.Println("}")
 }
